@@ -63,7 +63,7 @@ class AllSectionItem {
 const _freshFruits = [
   GroceryProduct(
     name: 'Bananas',
-    imageAsset: 'assets/grocery.jpg',
+    imageAsset: 'assets/Cake.png',
     price: 49,
     originalPrice: 65,
     unit: '6 pcs',
@@ -469,19 +469,22 @@ const List<AllSectionData> allTabSections = [
         image: 'assets/Fresh_vegetables.png',
       ),
       AllSectionItem(name: 'Fresh Fruits', image: 'assets/Biryani.png'),
-      AllSectionItem(name: 'Dairy, Bread and Eggs', image: 'assets/dairy.png'),
-      AllSectionItem(name: 'Meat and Seafood', image: 'assets/Meat.png'),
+      AllSectionItem(name: 'Dairy, Bread and Eggs', image: 'assets/Dairy.png'),
+      AllSectionItem(name: 'Meat and Seafood', image: 'assets/meatSeafood.png'),
     ],
   ),
   AllSectionData(
     title: 'Grocery & Kitchen',
     items: [
-      AllSectionItem(name: 'Atta, Rice and Dal', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Masalas', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Oils and Ghee', image: 'assets/grocery.jpg'),
+      AllSectionItem(
+        name: 'Atta, Rice and Dal',
+        image: 'assets/RiceAttaDals.png',
+      ),
+      AllSectionItem(name: 'Masalas', image: 'assets/masalas.jpg'),
+      AllSectionItem(name: 'Oils and Ghee', image: 'assets/oilsGhee.png'),
       AllSectionItem(
         name: 'Cereals and Breakfast',
-        image: 'assets/grocery.jpg',
+        image: 'assets/CerealsBreakfast.png',
       ),
     ],
   ),
@@ -490,39 +493,51 @@ const List<AllSectionData> allTabSections = [
     items: [
       AllSectionItem(
         name: 'Cold Drinks and Juices',
-        image: 'assets/grocery.jpg',
+        image: 'assets/ColdDrinksJuices.png',
       ),
       AllSectionItem(
         name: 'Ice Creams and Frozen Desserts',
-        image: 'assets/grocery.jpg',
+        image: 'assets/IceCreams.png',
       ),
-      AllSectionItem(name: 'Chips and Namkeens', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Chocolates', image: 'assets/grocery.jpg'),
+      AllSectionItem(
+        name: 'Chips and Namkeens',
+        image: 'assets/ChipsNamkeens.png',
+      ),
+      AllSectionItem(name: 'Chocolates', image: 'assets/Chocolates.png'),
       AllSectionItem(
         name: 'Noodles, Pasta, Vermicelli',
-        image: 'assets/grocery.jpg',
+        image: 'assets/NoodlesPasta.png',
       ),
-      AllSectionItem(name: 'Frozen Food', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Sweet Corner', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Paan Corner', image: 'assets/grocery.jpg'),
+      AllSectionItem(name: 'Frozen Food', image: 'assets/FrozenFood.png'),
+      AllSectionItem(name: 'Sweet Corner', image: 'assets/SweetCorner.png'),
+      AllSectionItem(name: 'Paan Corner', image: 'assets/paan.png'),
     ],
   ),
   AllSectionData(
     title: 'Beauty & Wellness',
     items: [
       AllSectionItem(name: 'Bath and Body', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Hair Care', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Skincare', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Makeup', image: 'assets/grocery.jpg'),
+      AllSectionItem(name: 'Hair Care', image: 'assets/HairCare.png'),
+      AllSectionItem(name: 'Skincare', image: 'assets/Skincare.png'),
+      AllSectionItem(name: 'Makeup', image: 'assets/Makeup.png'),
     ],
   ),
   AllSectionData(
     title: 'Household & Lifestyle',
     items: [
-      AllSectionItem(name: 'Home and Furnishing', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Kitchen and Dining', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Cleaning Essentials', image: 'assets/grocery.jpg'),
-      AllSectionItem(name: 'Clothing', image: 'assets/grocery.jpg'),
+      AllSectionItem(
+        name: 'Home and Furnishing',
+        image: 'assets/HomeFurnishing.png',
+      ),
+      AllSectionItem(
+        name: 'Kitchen and Dining',
+        image: 'assets/KitchenDining.png',
+      ),
+      AllSectionItem(
+        name: 'Cleaning Essentials',
+        image: 'assets/CleaningEssentials.png',
+      ),
+      AllSectionItem(name: 'Clothing', image: 'assets/Clothing.png'),
     ],
   ),
 ];

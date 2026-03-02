@@ -19,10 +19,10 @@ class _LoginScreenState extends State<LoginScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
@@ -63,13 +63,13 @@ class _LoginScreenState extends State<LoginScreen>
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 14,
-                    vertical: 20,
+                    vertical: 25,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(16),
@@ -80,7 +80,8 @@ class _LoginScreenState extends State<LoginScreen>
                           size: 28,
                         ),
                       ),
-                      const Spacer(),
+                      // const Spacer(),
+                      const SizedBox(height: 20),
                       const Center(
                         child: Text(
                           'Welcome Back',
@@ -116,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen>
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: size.height * 0.28,
+                  top: size.height * 0.24,
                   left: 24,
                   right: 24,
                   bottom: 24,
@@ -165,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
                         SizedBox(
                           width: double.infinity,
                           height: 55,
@@ -191,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
@@ -211,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
                         // Google login dummy button
                         Container(
                           height: 55,
@@ -223,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.g_mobiledata,
+                                Icons.g_mobiledata_rounded,
                                 size: 32,
                                 color: Colors.blue.shade700,
                               ),

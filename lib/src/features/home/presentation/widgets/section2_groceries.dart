@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 final items = [
   {'name': 'Vegetables', 'image': 'assets/Fresh_vegetables.png'},
   {'name': 'Fruits', 'image': 'assets/fresh_food.jpg'},
-  {'name': 'Milk/Dairy', 'image': 'assets/dairy.png'},
+  // {'name': 'Milk/Dairy', 'image': 'assets/Dairy.png'},
   {'name': 'Vegetables', 'image': 'assets/Fresh_vegetables.png'},
   {'name': 'Fruits', 'image': 'assets/grocery.jpg'},
 ];

@@ -23,7 +23,7 @@ class HotDealsSection extends StatelessWidget {
             children: [
               const Text(
                 'Hot Deals',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               GestureDetector(
                 onTap: () {

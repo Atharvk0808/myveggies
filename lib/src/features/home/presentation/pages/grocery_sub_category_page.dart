@@ -20,22 +20,29 @@ class GrocerySubCategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tab.name.toLowerCase() == 'all') {
-      return CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-              child: HotDealsSection(),
+      return RefreshIndicator(
+        onRefresh: () async {
+          // Add refresh logic here
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                child: HotDealsSection(),
+              ),
             ),
-          ),
-          const FreshItemsSection(),
-          const GroceryKitchenSection(),
-          const SnacksDrinksSection(),
-          const BeautyWellnessSection(),
-          const HouseholdLifestyleSection(),
-          const BannerSection(),
-          const SliverToBoxAdapter(child: SizedBox(height: 52)),
-        ],
+            const FreshItemsSection(),
+            const GroceryKitchenSection(),
+            const SnacksDrinksSection(),
+            const BeautyWellnessSection(),
+            const HouseholdLifestyleSection(),
+            const BannerSection(),
+            const SliverToBoxAdapter(child: SizedBox(height: 52)),
+          ],
+        ),
       );
     }
 
@@ -111,6 +118,15 @@ class GrocerySubCategoryPage extends StatelessWidget {
       );
     }
 
-    return CustomScrollView(slivers: slivers);
+    return RefreshIndicator(
+      onRefresh: () async {
+        // Add refresh logic here
+        await Future.delayed(const Duration(seconds: 1));
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: slivers,
+      ),
+    );
   }
 }

@@ -39,25 +39,32 @@ class HotDealsPage extends StatelessWidget {
       ),
       body: hotDeals.isEmpty
           ? const Center(child: Text("No Hot Deals currently available"))
-          : GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.65,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: hotDeals.length,
-              itemBuilder: (context, index) {
-                final product = hotDeals[index];
-                return ProductCard(
-                  image: product.imageAsset,
-                  title: product.name,
-                  rating: product.rating,
-                  price: product.price,
-                  originalPrice: product.originalPrice,
-                );
+          : RefreshIndicator(
+              onRefresh: () async {
+                // Add refresh logic here
+                await Future.delayed(const Duration(seconds: 1));
               },
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16),
+                physics: const AlwaysScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.65,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: hotDeals.length,
+                itemBuilder: (context, index) {
+                  final product = hotDeals[index];
+                  return ProductCard(
+                    image: product.imageAsset,
+                    title: product.name,
+                    rating: product.rating,
+                    price: product.price,
+                    originalPrice: product.originalPrice,
+                  );
+                },
+              ),
             ),
     );
   }
