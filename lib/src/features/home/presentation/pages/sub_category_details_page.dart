@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/allDummy_data.dart';
-import '../widgets/product_card.dart';
+import '../widgets/grocery_product_card.dart';
 
 class SubCategoryDetailsPage extends StatefulWidget {
   final String title;
@@ -141,7 +141,7 @@ class _SubCategoryDetailsPageState extends State<SubCategoryDetailsPage> {
                       itemBuilder: (context, index) {
                         final product =
                             widget.categories[_selectedIndex].products[index];
-                        return ProductCard(
+                        return GroceryProductCard(
                           image: product.imageAsset,
                           title: product.name,
                           rating: product.rating,

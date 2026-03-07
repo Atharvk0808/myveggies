@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/allDummy_data.dart';
-import '../widgets/product_card.dart';
+import '../widgets/grocery_product_card.dart';
 import '../widgets/hot_deals_section.dart';
 import '../widgets/fresh_items_section.dart';
 import '../widgets/grocery_kitchen_section.dart';
@@ -96,7 +96,7 @@ class GrocerySubCategoryPage extends StatelessWidget {
             ),
             delegate: SliverChildBuilderDelegate((context, index) {
               final product = subCat.products[index];
-              return ProductCard(
+              return GroceryProductCard(
                 image: product.imageAsset,
                 title: product.name,
                 rating: product.rating,

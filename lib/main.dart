@@ -5,16 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'src/configs/injector_conf.dart';
 import 'src/routes/app_route_conf.dart';
 
-void main() {
+import 'src/features/cart/data/cart_data.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
-  runApp(const MyViggiesApp());
-  // runApp(
-  //   DevicePreview(
-  //     enabled: !kReleaseMode, // Release madhe auto disable
-  //     builder: (context) => const MyViggiesApp(),
-  //   ),
-  // );
+  await loadCartFromStorage();
+  // runApp(const MyViggiesApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode, // Release madhe auto disable
+      builder: (context) => const MyViggiesApp(),
+    ),
+  );
 }
 
 class MyViggiesApp extends StatelessWidget {

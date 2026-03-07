@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/allDummy_data.dart';
-import '../widgets/product_card.dart';
+import '../widgets/grocery_product_card.dart';
 
 class HotDealsPage extends StatelessWidget {
   const HotDealsPage({super.key});
@@ -56,7 +56,7 @@ class HotDealsPage extends StatelessWidget {
                 itemCount: hotDeals.length,
                 itemBuilder: (context, index) {
                   final product = hotDeals[index];
-                  return ProductCard(
+                  return GroceryProductCard(
                     image: product.imageAsset,
                     title: product.name,
                     rating: product.rating,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/widgets/custom_bottom_nav_bar.dart';
 import '../../data/cart_data.dart';
 import 'coupon_page.dart';
+import '../../../../core/widgets/page_loading_wrapper.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -11,8 +13,11 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  final GlobalKey _billDetailsKey = GlobalKey();
+
   void _updateCart() {
     setState(() {});
+    saveCartToStorage();
   }
 
   Widget _buildCouponsCard(BuildContext context) {
@@ -36,7 +41,10 @@ class _CartPageState extends State<CartPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CouponPage()),
+              MaterialPageRoute(
+                builder: (context) =>
+                    const PageLoadingWrapper(child: CouponPage()),
+              ),
             );
           },
           child: Padding(
@@ -75,12 +83,106 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  Widget _buildDottedDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final dashCount = (constraints.constrainWidth() / 6).floor();
+          return Flex(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            direction: Axis.horizontal,
+            children: List.generate(dashCount, (_) {
+              return const SizedBox(
+                width: 3,
+                height: 1,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.black26),
+                ),
+              );
+            }),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBillRow(
+    String title,
+    String value, {
+    String? oldPrice,
+    bool dottedUnderline = false,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          decoration: dottedUnderline
+              ? BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.shade400,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                )
+              : null,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 13,
+              decoration: dottedUnderline
+                  ? TextDecoration.underline
+                  : TextDecoration.none,
+              decorationStyle: TextDecorationStyle.dashed,
+              decorationColor: Colors.grey.shade500,
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            if (oldPrice != null) ...[
+              Text(
+                oldPrice,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: Colors.black54,
+                ),
+              ),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildBillDetailsCard(double totalAmount) {
+    double originalTotal = totalAmount + 26.0; // Dummy original total
+    double handlingFeeOld = 11.0;
+    double handlingFeeNew = 5.0;
+    double deliveryTip = 10.0;
     double deliveryFee = 30.0;
-    double gst = 10.0;
-    double toPay = totalAmount + deliveryFee + gst;
+    double gst = 6.30;
+
+    double toPay =
+        totalAmount + handlingFeeNew + deliveryTip + deliveryFee + gst;
+    double originalToPay =
+        originalTotal + handlingFeeOld + deliveryTip + deliveryFee + gst;
 
     return Container(
+      key: _billDetailsKey,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -101,75 +203,79 @@ class _CartPageState extends State<CartPage> {
             'BILL DETAILS',
             style: TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w800,
               color: Colors.black54,
               letterSpacing: 1.2,
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Item Total',
-                style: TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-              Text(
-                '₹${totalAmount.toInt()}',
-                style: const TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-            ],
+          _buildBillRow(
+            'Item Total',
+            '₹${totalAmount.toStringAsFixed(2)}',
+            oldPrice: '₹${originalTotal.toStringAsFixed(2)}',
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Delivery Partner Fee',
-                style: TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-              Text(
-                '₹${deliveryFee.toInt()}',
-                style: const TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-            ],
+          _buildBillRow(
+            'Handling Fee',
+            '₹${handlingFeeNew.toStringAsFixed(2)}',
+            oldPrice: '₹${handlingFeeOld.toStringAsFixed(2)}',
+            dottedUnderline: true,
+          ),
+          _buildDottedDivider(),
+          _buildBillRow(
+            'Delivery Partner Tip',
+            '₹${deliveryTip.toStringAsFixed(2)}',
+          ),
+          _buildDottedDivider(),
+          _buildBillRow(
+            'Delivery Partner Fee',
+            '₹${deliveryFee.toStringAsFixed(2)}',
+            dottedUnderline: true,
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Add items worth ₹44 to avail your Free Delivery on this order',
+            style: TextStyle(color: Colors.grey, fontSize: 12),
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'GST and Charges',
-                style: TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-              Text(
-                '₹${gst.toInt()}',
-                style: const TextStyle(color: Colors.black87, fontSize: 13),
-              ),
-            ],
+          _buildBillRow(
+            'GST and Charges',
+            '₹${gst.toStringAsFixed(2)}',
+            dottedUnderline: true,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(height: 1, color: Colors.black12, thickness: 1),
-          ),
+          _buildDottedDivider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 'To Pay',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Colors.black87,
                 ),
               ),
-              Text(
-                '₹${toPay.toInt()}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+              Row(
+                children: [
+                  Text(
+                    '₹${originalToPay.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                      decorationColor: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '₹${toPay.toInt()}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -181,7 +287,7 @@ class _CartPageState extends State<CartPage> {
   Widget _buildNoteCard() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: const Color(0xFFF9F9F9),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -191,7 +297,6 @@ class _CartPageState extends State<CartPage> {
             offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(color: Colors.grey.shade200),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -200,16 +305,16 @@ class _CartPageState extends State<CartPage> {
           RichText(
             text: const TextSpan(
               style: TextStyle(
-                color: Colors.black54,
-                fontSize: 12,
-                height: 1.5,
+                color: Colors.black87,
+                fontSize: 13,
+                height: 1.4,
               ),
               children: [
                 TextSpan(
                   text: 'NOTE: ',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: Colors.redAccent,
                   ),
                 ),
                 TextSpan(
@@ -219,15 +324,17 @@ class _CartPageState extends State<CartPage> {
               ],
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           GestureDetector(
             onTap: () {},
             child: const Text(
               'Read cancellation policy',
               style: TextStyle(
                 color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.blue,
               ),
             ),
           ),
@@ -244,9 +351,10 @@ class _CartPageState extends State<CartPage> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 1,
             blurRadius: 10,
-            offset: const Offset(0, -5),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -284,7 +392,16 @@ class _CartPageState extends State<CartPage> {
                 ),
                 const SizedBox(height: 2),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (_billDetailsKey.currentContext != null) {
+                      Scrollable.ensureVisible(
+                        _billDetailsKey.currentContext!,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeInOutCubic,
+                        alignment: 0.5,
+                      );
+                    }
+                  },
                   child: const Text(
                     'View Detailed Bill >',
                     style: TextStyle(
@@ -388,129 +505,320 @@ class _CartPageState extends State<CartPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            itemCount: globalCart.length,
-                            itemBuilder: (context, index) {
-                              final item = globalCart[index];
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 16),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.grey.shade200,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.02),
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 2),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          '10 Mins',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 18,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 2,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.green.shade200,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.bolt,
+                                                color: Colors.green.shade700,
+                                                size: 12,
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Text(
+                                                'Superfast',
+                                                style: TextStyle(
+                                                  color: Colors.green.shade700,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      '${globalCart.length} item${globalCart.length > 1 ? 's' : ''}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.asset(
-                                        item.image,
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) =>
-                                            const Icon(
-                                              Icons.fastfood,
-                                              color: Colors.grey,
-                                              size: 40,
-                                            ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
+                                _buildDottedDivider(),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.zero,
+                                  itemCount: globalCart.length,
+                                  itemBuilder: (context, index) {
+                                    final item = globalCart[index];
+                                    return Container(
+                                      margin: const EdgeInsets.only(bottom: 20),
+                                      child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            item.title,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
                                             ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
+                                            child: Image.asset(
+                                              item.image,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, ___) =>
+                                                  Container(
+                                                    width: 60,
+                                                    height: 60,
+                                                    color: Colors.grey.shade200,
+                                                    child: const Icon(
+                                                      Icons.fastfood,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                            ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '₹${item.price.toInt()}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: Colors.black87,
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  item.title,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 15,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                const Text(
+                                                  '165 g',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.bookmark_border,
+                                                      size: 14,
+                                                      color: Colors.black54,
+                                                    ),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      'Move to wishlist',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.black54,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        decorationStyle:
+                                                            TextDecorationStyle
+                                                                .dashed,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: Colors.grey.shade300,
+                                                  ),
+                                                  color: Colors.white,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 4,
+                                                      vertical: 2,
+                                                    ),
+                                                child: Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        if (item.quantity > 1) {
+                                                          item.quantity--;
+                                                        } else {
+                                                          removeFromCart(item);
+                                                        }
+                                                        _updateCart();
+                                                      },
+                                                      child: const Padding(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 6,
+                                                            ),
+                                                        child: Icon(
+                                                          Icons.remove,
+                                                          size: 16,
+                                                          color:
+                                                              Colors.blueAccent,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${item.quantity}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Colors.blueAccent,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        item.quantity++;
+                                                        _updateCart();
+                                                      },
+                                                      child: const Padding(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 6,
+                                                            ),
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          size: 16,
+                                                          color:
+                                                              Colors.blueAccent,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '₹${((item.price * item.quantity) + 26).toInt()}', // Mocked original price match +26
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    '₹${(item.price * item.quantity).toInt()}',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              if (item.quantity > 1) {
-                                                item.quantity--;
-                                              } else {
-                                                removeFromCart(item);
-                                              }
-                                              _updateCart();
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 4,
-                                              ),
-                                              child: Icon(
-                                                Icons.remove,
-                                                size: 16,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            '${item.quantity}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              item.quantity++;
-                                              _updateCart();
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 4,
-                                              ),
-                                              child: Icon(Icons.add, size: 16),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                    );
+                                  },
                                 ),
-                              );
-                            },
+                                const SizedBox(height: 8),
+                                OutlinedButton.icon(
+                                  onPressed: () {
+                                    final router = GoRouter.of(context);
+                                    if (router.canPop()) {
+                                      router.pop();
+                                      router.push('/grocery-category');
+                                    } else {
+                                      router.pushReplacement(
+                                        '/grocery-category',
+                                      );
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 16,
+                                    color: Colors.black54,
+                                  ),
+                                  label: const Text(
+                                    'Add more items',
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           _buildCouponsCard(context),

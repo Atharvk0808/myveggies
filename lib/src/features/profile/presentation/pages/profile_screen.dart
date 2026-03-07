@@ -80,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
 
             // ================= WALLET CARD =================
             Container(
@@ -181,11 +181,14 @@ class ProfileScreen extends StatelessWidget {
                     Colors.red,
                     Colors.red.withValues(alpha: 0.1),
                   ),
-                  _buildQuickAction(
-                    Icons.location_on_outlined,
-                    "Address",
-                    Colors.blue,
-                    Colors.blue.withValues(alpha: 0.1),
+                  GestureDetector(
+                    onTap: () => context.push(AppRoutePath.address),
+                    child: _buildQuickAction(
+                      Icons.location_on_outlined,
+                      "Address",
+                      Colors.blue,
+                      Colors.blue.withValues(alpha: 0.1),
+                    ),
                   ),
                   _buildQuickAction(
                     Icons.card_giftcard,

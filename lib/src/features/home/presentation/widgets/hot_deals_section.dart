@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/allDummy_data.dart';
 import '../../../../routes/app_route_path.dart';
-import 'product_card.dart';
+import 'grocery_product_card.dart';
 
 class HotDealsSection extends StatelessWidget {
   const HotDealsSection({super.key});
@@ -53,7 +53,7 @@ class HotDealsSection extends StatelessWidget {
               final product = hotDeals[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ProductCard(
+                child: GroceryProductCard(
                   image: product.imageAsset,
                   title: product.name,
                   rating: product.rating,

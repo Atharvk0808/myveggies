@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../cart/presentation/pages/cart_page.dart';
 import '../../../cart/data/cart_data.dart';
+import '../../../../core/widgets/page_loading_wrapper.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final String image;
@@ -56,7 +57,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                CupertinoPageRoute(builder: (context) => const CartPage()),
+                CupertinoPageRoute(
+                  builder: (context) =>
+                      const PageLoadingWrapper(child: CartPage()),
+                ),
               );
             },
           ),
@@ -292,7 +296,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => const CartPage(),
+                          builder: (context) =>
+                              const PageLoadingWrapper(child: CartPage()),
                         ),
                       );
                     },

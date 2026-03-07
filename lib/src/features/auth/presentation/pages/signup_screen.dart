@@ -319,168 +319,180 @@ class _SignupScreenState extends State<SignupScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            // Top Gradient
-            Container(
-              height: size.height * 0.45,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.deepOrange, Colors.orange],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
-                ),
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () => context.pop(),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      const Center(
-                        child: Text(
-                          'Create Account',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Center(
-                        child: Text(
-                          'Join us and start shopping in seconds!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16, color: Colors.white70),
-                        ),
-                      ),
-                      const SizedBox(height: 120),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallScreen = constraints.maxHeight < 600;
+          final double bgHeight = isSmallScreen ? 340 : 380;
+          final double cardTopPosition = isSmallScreen ? 180 : 220;
 
-            // Animated Signup Card
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: size.height * 0.28,
-                  left: 24,
-                  right: 24,
-                  bottom: 24,
-                ),
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
+          return SingleChildScrollView(
+            child: Stack(
+              children: [
+                // Top Gradient
+                Container(
+                  height: bgHeight,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.deepOrange, Colors.orange],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 10),
-
-                        _buildTextField(
-                          label: 'Full Name',
-                          icon: Icons.person_outline,
-                        ),
-                        const SizedBox(height: 20),
-
-                        _buildTextField(
-                          label: 'Phone Number',
-                          icon: Icons.phone_outlined,
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(height: 20),
-
-                        _buildTextField(
-                          label: 'Email (Optional)',
-                          icon: Icons.email_outlined,
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        const SizedBox(height: 20),
-
-                        _buildTextField(
-                          label: 'Create Password',
-                          icon: Icons.lock_outline,
-                          isPassword: true,
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        SizedBox(
-                          width: double.infinity,
-                          height: 55,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.go(AppRoutePath.home);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepOrange,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
+                  ),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 20,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                            ),
-                            child: const Text(
-                              'SIGN UP',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                              child: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Colors.white,
+                                size: 20,
                               ),
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 20),
-                      ],
+                          // const Spacer(),
+                          const SizedBox(height: 20,),
+                          const Center(
+                            child: Text(
+                              'Create Account',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Center(
+                            child: Text(
+                              'Join us and start shopping in seconds!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+
+                // Animated Signup Card
+                SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: cardTopPosition,
+                      left: 24,
+                      right: 24,
+                      bottom: 24,
+                    ),
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10),
+
+                            _buildTextField(
+                              label: 'Full Name',
+                              icon: Icons.person_outline,
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              label: 'Phone Number',
+                              icon: Icons.phone_outlined,
+                              keyboardType: TextInputType.phone,
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              label: 'Email (Optional)',
+                              icon: Icons.email_outlined,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              label: 'Create Password',
+                              icon: Icons.lock_outline,
+                              isPassword: true,
+                            ),
+
+                            const SizedBox(height: 32),
+
+                            SizedBox(
+                              width: double.infinity,
+                              height: 55,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.go(AppRoutePath.home);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.deepOrange,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'SIGN UP',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

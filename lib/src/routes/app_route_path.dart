@@ -9,4 +9,7 @@ class AppRoutePath {
   static const String groceryCategory = '/grocery-category';
   static const String grocerySubCategory = '/grocery-sub-category';
   static const String hotDeals = '/hot-deals';
+  static const String address = '/address';
+  static const String mapLocation = '/map-location';
+  static const String locationDetails = '/location-details';
 }
